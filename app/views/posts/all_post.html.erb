@@ -1,0 +1,57 @@
+<div class="m-4"><%= link_to 'Topics', topics_path, class: "btn btn-primary" %>  <%= link_to 'All Posts', posts_path, class: "btn btn-secondary" %>
+</div>
+<%= form_with url:all_post_path, method: :get do |form| %>
+  <div class="row g-2 align-items-center">
+    <div class="col-auto">
+      <%= form.label :from_date, "From Date:", class: "col-form-label" %>
+    </div>
+    <div class="col-auto">
+      <%= form.date_field :from_date, class: "form-control", required: true %>
+    </div>
+    <div class="col-auto">
+      <%= form.label :to_date, "To Date:", class: "col-form-label" %>
+    </div>
+    <div class="col-auto">
+      <%= form.date_field :to_date, class: "form-control", required: true %>
+    </div>
+    <div class="col-auto">
+      <%= form.submit("show details", class: "btn btn-primary") %>
+    </div>
+  </div>
+<% end %>
+<br>
+<% if @all_posts.present? %>
+  <% @all_posts.each do |post| %>
+    <div class="container">
+      <h3 class="py-3"><%= post.title.upcase %></h3><br>
+      <% if post.image.present? %>
+        <%= image_tag(post.image, class: "img-fluid rounded image py-3") %>
+      <% end %><br>
+      <div class="content py-3"> <%= post.description %></div>
+    </div><br>
+  <%end %>
+  <nav class="mt-4" aria-label="Page navigation">
+    <%= will_paginate @all_posts, previous_label: 'Previous', next_label: 'Next', class: 'pagination justify-content-center' %>
+  </nav>
+<% end %>
+
+<style>
+
+    h3 {
+        margin-bottom: -1.5em;
+    }
+    .image {
+        width: 50%;
+        height: 40%;
+        margin-left: 25%;
+    }
+
+    .container{
+        border: 1px solid black;
+        width: 60%;
+        height: 45%;
+        padding: 2%;
+        border-radius: 6px;
+    }
+
+</style>

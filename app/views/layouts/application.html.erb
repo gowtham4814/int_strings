@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>IntStrings</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= javascript_include_tag 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', as: 'script', defer: true %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+
+  <body>
+  <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <%= render "user/edit" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse" >
+        <ul class="navbar-nav">
+
+
+          <% if user_signed_in? %>
+            <li class="nav-item">
+              <%= link_to "Edit Profile", "#", class: "float-right nav-link text-white px-5", data: { bs_toggle: "modal", bs_target: "#editProfileModal" } %>
+            </li>
+            <li class="nav-item ">
+              <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "float-right nav-link text-white px-5" %>
+            </li>
+          <% else %>
+            <li class="nav-item ml-auto">
+              <%= link_to "Sign In", new_user_session_path, class: "nav-link text-white px-5" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Sign Up", new_user_registration_path, class: "nav-link text-white px-5" %>
+            </li>
+          <% end %>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <style>
+      .navbar-nav .nav-item {
+          float: right !important;
+      }
+
+  </style>
+    <%= yield %>
+  </body>
+</html>

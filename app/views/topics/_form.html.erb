@@ -1,0 +1,33 @@
+<div class="container-fluid" >
+ <style>
+     .width{
+  width: 30%;
+  }
+</style>
+  <%= form_with(model: topic) do |form| %>
+    <% if topic.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(topic.errors.count, "error") %> prohibited this topic from being saved:</h2>
+
+        <ul>
+          <% topic.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="field">
+      <%= form.label :name %><br>
+      <%= form.text_field :name, class: "form-control width" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :description %><br>
+      <%= form.text_field :description, class: "form-control width"  %>
+    </div>
+<br>
+    <div class="actions">
+      <%= form.submit "Submit", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

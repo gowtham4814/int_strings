@@ -1,0 +1,4 @@
+<% @users.each do |user| %>
+  <br><%= user.email %>
+<% end %><br>
+<%= link_to 'Back', topic_post_path(@topic, @post) %>

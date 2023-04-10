@@ -1,0 +1,9 @@
+$('.loading-screen').css('display', 'none');
+<% if @post.persisted? %>
+alert('Your post was created successfully!');
+$('#form')[0].reset();
+
+$('#error-container').html('');
+<% else %>
+$('#error-container').html('<%= j render "posts/error", post: @post %>');
+<% end %>

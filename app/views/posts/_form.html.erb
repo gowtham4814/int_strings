@@ -1,0 +1,109 @@
+<head>
+  <%= javascript_pack_tag 'form', 'data-turbolinks-track': 'reload', defer: true %>
+</head>
+<style>
+    .width{
+        width: 30%;
+    }
+</style>
+<div class="container-fluid" >
+<div class="loading-screen">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading...</div>
+</div>
+<%= form_with(model: [@topic, post], local: false, id: 'form') do |form| %>
+
+    <div id="error-container">
+    </div>
+
+
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title, class: "form-control width" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description, class: "form-control width" %>
+  </div><br>
+    <div class="mb-3" style="width: 16%">
+      <%= form.label :image, class: "form-label" %>
+      <%= form.file_field :image, class: "form-control" %>
+    </div>
+
+    <%= form.fields_for :tags_attributes do |tag| %>
+      <%= tag.label :Hashtag %>   <div style="display: flex">
+      <%= tag.text_area :hashtag, id: :tags, placeholder: "Enter tags with space", value: @tag_name, class: "form-control width", style: " margin-right: 2%" %><br>
+
+      <div class="form-floating" style="width: 10%">
+        <select class="form-select" id="myselect" onchange="myFunction()">
+          <option>select tag</option>
+          <% @all_tags.each do |tag| %>
+            <option value="<%= tag.hashtag %>"><%= tag.hashtag %></option>
+          <% end %>
+        </select>
+        <label for="myselect">Select Tag</label>
+      </div>
+</div>
+  <% end %>
+
+  <div class="actions"><br>
+    <%= form.submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<style>
+
+    .loading-screen {
+
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        background-color: rgba(255, 255, 255, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .loading-spinner {
+        border-radius: 50%;
+        width: 2em;
+        height: 2em;
+        margin-right: 10px;
+        border: 5px solid rgba(0, 0, 0, 0.1);
+        border-top-color: #3498db;
+        animation: spin 1s infinite linear;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loading-text {
+        font-size: 1.2em;
+        color: #333;
+    }
+
+</style>
+<script>
+    function myFunction() {
+        var a = $('#myselect').val();
+        var value = $('#tags').val();
+        if (value == "") {
+            value = value + a;
+        } else {
+            value = value + " " + a;
+        }
+        $('#tags').val(value);
+    }
+
+</script>
+</div>

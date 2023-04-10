@@ -1,0 +1,121 @@
+<head>
+    <%= javascript_pack_tag 'post', 'data-turbolinks-track': 'reload', defer: true %>
+</head>
+<div class="container">
+  <h1><%= @post.title.upcase %></h1>
+  <p><%= @post.description %></p>
+  <p><strong>Topic:</strong> <%= @topic.name %></p>
+
+  <div class="mb-3">
+    <% if @post.image.present? %>
+      <%= image_tag(@post.image, class: "img-fluid", width: "50%", height: "25%") %>
+    <% end %>
+  </div>
+
+
+  <div class="mb-3">
+    <% @tags.each do |tag| %>
+      <span class="badge bg-primary"><%= tag.hashtag %></span>
+    <% end %>
+  </div>
+
+  <div class="mb-3">
+    <p>Total Ratings: <%= @post.ratings_count || 0 %></p>
+    <p>Average Ratings: <%= @post.average_rating || 0 %></p>
+  </div>
+
+  <%= form_with model: @rating, id: "form", url: topic_post_ratings_path(@topic, @post), method: :post do |r| %>
+    <div class="mb-3">
+      <%= r.label :Ratings %><br>
+      <% [1, 2, 3, 4, 5].each do |value| %>
+
+        <% checked = @select.any? { |rating| rating.rating.to_s == value.to_s } %>
+
+        <%= r.radio_button :rating, value.to_s, checked: checked, id: (checked ? "checked" : nil), class: "rating-radio form-check-input" %>
+        <%= label_tag "rating-#{value}", value, class: "rating-label" %>
+
+      <% end %>
+
+    </div>
+  <% end %><br>
+
+  <div class="mb-3">
+    <% if can? :update, @post %>
+      <%= link_to 'Edit', edit_topic_post_path(@topic, @post), class: "btn btn-primary" %>
+    <% end %>
+    <%= link_to 'Back', topic_posts_path(@topic), class: "btn btn-secondary" %>
+  </div>
+
+  <%= form_with model: @comment, url: topic_post_comments_path(@topic, @post),local: false , method: :post do |f|%>
+    <div class="mb-3">
+      <%= f.label :comment, class: "form-label" %>
+      <%= f.text_area :comment, class: "form-control my-2" %>
+      <%= f.submit "Submit", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+  <div style="display: none"><div id = "post"><%= @post.id %></div><div id= "topic"><%= @topic.id %></div></div>
+  <div class="mb-3">
+    <p>Total Comments: <%=  @post.comments_count || 0  %></p>
+    <% @comments.each do |comment| %><div class="comment">
+    <div class="view">
+      <div  class="box border p-3 mb-3">
+        <div class="px-5 py-3 container my-2", style="display: inline-block; margin: auto; border-radius: 4px; background: #efefef"><%= comment.comment %></div><br>
+        <div class="my-2">
+          <% if can? :update, comment %>
+            <button class="edit-button btn btn-sm btn-primary">Edit</button>
+          <% end %>
+          <% if can? :delete, comment %>
+            <%= link_to 'Delete', topic_post_comment_delete_path(@topic, @post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-sm btn-danger" %>
+          <% end %>
+        </div>
+        <%= form_with model: @commentrating, url: topic_post_comment_rating_path(@topic, @post, comment), method: :post do |r| %>
+          <div class="mb-3">
+            <% [1, 2, 3, 4, 5].each do |value| %>
+              <%= r.radio_button :rating, value.to_s, class: "rating-radio form-check-input" %>
+              <%= label_tag "rating-#{value}", value, class: "rating-label" %>
+            <% end %>
+          </div>
+        <% end %><br>
+      </div>
+    </div>
+    <% if can? :update, comment %>
+    <div class="edit " style="display: none">
+      <%= form_with model: @comment, url: topic_post_comment_path(@topic, @post, comment), local: false, method: :put do |f| %>
+        <div class="mb-3">
+          <%= f.label :comment, class: "form-label" %>
+          <%= f.text_area :comment, class: "form-control my-2", value: comment.comment %>
+          <%= f.submit "Submit", class: "btn btn-sm btn-primary" %>
+          <button class="back-button btn btn-sm btn-secondary">Back</button>
+        </div>
+      <% end %>
+    </div>
+  </div><% end %>
+<% end %></div> </div>
+<script>
+
+
+
+    // function Rating() {
+    //     document.getElementById("form").submit();
+    // }
+
+    // $(document).ready(function() {
+    //     $("#form1").on("click", function() {
+    //         this.submit();
+    //     });
+    // });
+
+
+</script>
+<style>
+    .box {
+        border: 1px solid black;
+        padding: 15px;
+        overflow-wrap: break-word;
+    }
+    .rating-radio:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+</style>
